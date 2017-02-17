@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div id="board">
+    </div>
+
+
+    <script type="text/javascript">
+    var blankSpace = [2, 2];
+    var moveDeltas = {
+      up: [-1, 0],
+      down: [1, 0],
+      left: [0, -1],
+      right: [0, 1]
+    }
+
+      const board = [[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, " "]];
+
+    function isValid(dir, currentBlank) {
+      var newPos = [currentBlank[0] + moveDeltas[dir][0], currentBlank[1] + moveDeltas[dir][1]];
+      if ((newPos[0] >= 0 && newPos[0] < board.length) && (newPos[1] >= 0 && newPos[1] < board.length)) {
+        return true;
+      }
+      return false;
+    }
+
+    function buildBoard(board) {
+      boardNode = document.getElementById("board");
+
+      if (boardNode.hasChildNodes()) {
+        // boardNode.removeChild('ul');
+      }
+
+      board.forEach( function(row, idx) {
+        var rowNode = document.createElement("ul");
+          row.forEach( function(tile) {
+            var tileNode = document.createElement("li");
+            tileNode.textContent = tile;
+            rowNode.appendChild(tileNode);
+          })
+        boardNode.appendChild(rowNode);
+      })
+    }
+
+    function move(board, pos1, pos2) {
+      while (boardNode.lastChild) { boardNode.removeChild(boardNode.lastChild) }
+      var from = board[pos1[0]][pos1[1]];
+      var to = board[pos2[0]][pos2[1]];
+      board[pos1[0]][pos1[1]] = to;
+      board[pos2[0]][pos2[1]] = from;
+      buildBoard(board)
+    }
+
+    function getInput(e) {
+      if (e.ctrl || e.keyCode == '37') {
+        move(board, [0,0], [0, 1]);
+      } else if (e.keyCode == '38') {
+        move(board, [0,0], [1, 1]);
+      } else if (e.keyCode == '39') {
+        move(board, [0,0], [2, 2]);
+      } else if (e.keyCode == '40') {
+        move(board, [0,0], [0, 3]);
+      }
+    }
+
+    document.onLoad = buildBoard(board);
+    document.addEventListener('keydown', getInput, false);
+    </script>
+
+  </body>
+</html>
